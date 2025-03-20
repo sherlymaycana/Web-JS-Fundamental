@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch API Example</title>
+  </head>
+  <body>
+    <h2>Data Post</h2>
+    <p id="postData">Memuat data...</p>
+
+    <script>
+      fetch("https://jsonplaceholder.typicode.com/posts", {
+        method: "POST", // Menggunakan metode HTTP POST
+        headers: {
+          "Content-Type": "application/json", // Memberi tahu server bahwa data yang dikirim adalah JSON
+        },
+
+        body: JSON.stringify({
+          // Data yang dikirim
+          title: "Belajar Fetch API",
+          body: "Ini adalah contoh request POST menggunakan Fetch API.",
+          userId: 1,
+        }),
+      })
+        .then((response) => response.json()) // Mengubah response ke format JSON
+        .then((data) => {
+          console.log("Data berhasil dikirim:", data);
+          // Menampilkan data di halaman web
+          document.getElementById("postData").innerHTML = `
+                    <strong>ID:</strong> ${data.id} <br />
+                    <strong>Judul:</strong> ${data.title} <br />
+                    <strong>Isi:</strong> ${data.body} `;
+        })
+        .catch((error) => console.log("Terjadi kesalahan:", error)); // Menangani error
+    </script>
+  </body>
+</html>

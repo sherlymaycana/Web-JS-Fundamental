@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch API - Table Example</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+      }
+      th {
+        background-color: #f4f4f4;
+      }
+      .delete-btn {
+        cursor: pointer;
+        color: #fff;
+        background: red;
+        font-size: 15px;
+        display: flex;
+        padding: 4px 10px;
+        border: 1px solid #fff;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Posts List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Body</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="data-table">
+        <!-- Data from API will be inserted here -->
+      </tbody>
+    </table>
+
+    <script>
+      const API_URL = "https://jsonplaceholder.typicode.com/posts";
+      const tableBody = document.getElementById("data-table");
+
+      fetch(API_URL, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          data.slice(0, 5).forEach((post) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                    <td>${post.id}</td>
+                    <td>${post.title}</td>
+                    <td>${post.body}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deletePost(${post.id}, this)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+            tableBody.appendChild(row);
+          });
+        })
+        .catch((error) => console.log("Error fetching data:", error));
+
+      function deletePost(postId, btn) {
+        fetch(`${API_URL}/${postId}`, { method: "DELETE" })
+          .then(() => {
+            btn.closest("tr").remove();
+            console.log(`Post with ID ${postId} deleted.`);
+          })
+          .catch((error) => console.log("Error deleting post:", error));
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        cursor: pointer;
+      }
+      #outerDiv {
+        width: 200px;
+        height: 200px;
+        background: rgb(53, 53, 255);
+      }
+      #innerDiv {
+        width: 100px;
+        height: 100px;
+        background: rgb(255, 0, 0);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="outerDiv">
+      <div id="innerDiv"></div>
+    </div>
+  </body>
+  <script>
+    const outerDiv = document.querySelector("#outerDiv");
+    const innerDiv = document.querySelector("#innerDiv");
+
+    outerDiv.addEventListener("click", () => {
+      console.log("Outer div clicked");
+    });
+
+    innerDiv.addEventListener("click", (event) => {
+      event.stopPropagation();
+      console.log("Inner div clicked");
+    });
+  </script>
+</html>

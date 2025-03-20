@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch API - CRUD Example</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="container mt-4">
+    <h2 class="text-center">Posts List</h2>
+
+    <!-- Form untuk Menambahkan Data -->
+    <div class="card p-3 mb-4">
+      <h4>Add New Post</h4>
+      <form id="postForm">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" class="form-control" id="title" required />
+        </div>
+        <div class="mb-3">
+          <label for="body" class="form-label">Body</label>
+          <textarea class="form-control" id="body" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+
+    <!-- Tabel Data -->
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Body</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="data-table">
+        <!-- Data dari API akan dimasukkan di sini -->
+      </tbody>
+    </table>
+
+    <!-- Modal Edit Data -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Post</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="editForm">
+              <input type="hidden" id="editId" />
+              <div class="mb-3">
+                <label for="editTitle" class="form-label">Title</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editTitle"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="editBody" class="form-label">Body</label>
+                <textarea
+                  class="form-control"
+                  id="editBody"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <button type="submit" class="btn btn-success">Update</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Fungsi Menambahkan Data ke Tabel
+      function addPostToTable(post) {
+        const row = document.createElement("tr");
+        row.setAttribute("data-id", post.id);
+        row.innerHTML = `
+          <td>${post.id}</td>
+          <td class="post-title">${post.title}</td>
+          <td class="post-body">${post.body}</td>
+          <td>
+            <div class="d-flex gap-1">
+                <button class="btn btn-warning btn-sm" onclick="editPost(${post.id})">
+                <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger btn-sm" onclick="deletePost(${post.id}, this)">
+                <i class="fas fa-trash"></i>
+            </button>
+            </div>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      }
+
+      const API_URL = "https://jsonplaceholder.typicode.com/posts";
+      const tableBody = document.getElementById("data-table");
+
+      // Fetch 5 Data Terakhir
+      fetch(API_URL)
+        .then((response) => response.json())
+        .then((data) => {
+          const lastFivePosts = data.slice(-5); // Ambil 5 data terakhir
+          lastFivePosts.forEach((post) => {
+            addPostToTable(post);
+          });
+        })
+        .catch((error) => console.log("Error fetching data:", error));
+
+      // Handle Form Submit untuk Menambah Data
+      document
+        .getElementById("postForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const title = document.getElementById("title").value;
+          const body = document.getElementById("body").value;
+
+          fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title, body, userId: 1 }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              addPostToTable(data);
+              document.getElementById("postForm").reset();
+            })
+            .catch((error) => console.log("Error adding post:", error));
+        });
+
+      // Fungsi Edit Data
+      function editPost(postId) {
+        const row = document.querySelector(`tr[data-id='${postId}']`);
+        const title = row.querySelector(".post-title").innerText;
+        const body = row.querySelector(".post-body").innerText;
+
+        document.getElementById("editId").value = postId;
+        document.getElementById("editTitle").value = title;
+        document.getElementById("editBody").value = body;
+
+        new bootstrap.Modal(document.getElementById("editModal")).show();
+      }
+
+      // Handle Form Submit untuk Update Data
+      document
+        .getElementById("editForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const postId = document.getElementById("editId").value;
+          const title = document.getElementById("editTitle").value;
+          const body = document.getElementById("editBody").value;
+
+          fetch(`${API_URL}/${postId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: postId, title, body, userId: 1 }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              const row = document.querySelector(`tr[data-id='${postId}']`);
+              row.querySelector(".post-title").innerText = data.title;
+              row.querySelector(".post-body").innerText = data.body;
+
+              bootstrap.Modal.getInstance(
+                document.getElementById("editModal")
+              ).hide();
+            })
+            .catch((error) => console.log("Error updating post:", error));
+        });
+
+      // Fungsi Delete Data
+      function deletePost(postId, btn) {
+        fetch(`${API_URL}/${postId}`, { method: "DELETE" })
+          .then(() => {
+            btn.closest("tr").remove();
+            console.log(`Post with ID ${postId} deleted.`);
+          })
+          .catch((error) => console.log("Error deleting post:", error));
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

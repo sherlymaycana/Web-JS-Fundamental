@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <button id="clickButton" class="btn">Klik BTN</button>
+  </body>
+
+  <script>
+    // Select the button
+    const button = document.querySelector("#clickButton");
+    let clickCount = 0;
+
+    // Add event listener for 'click'
+    button.addEventListener("click", () => {
+      clickCount++;
+      console.log(`Button clicked ${clickCount} times`);
+    });
+  </script>
+</html>

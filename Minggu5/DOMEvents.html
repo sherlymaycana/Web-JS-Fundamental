@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM Events</title>
+  </head>
+  <body>
+    <button id="btnKlik" onclick="hello(); hello2()">Klik</button>
+    <button id="btnKlik">Event</button>
+    <button id="btnRemove">Remove Event</button>
+  </body>
+  <script>
+    function hello() {
+      alert("Halo");
+    }
+    let btnKlik = document.getElementById("btnKlik");
+    let btnRemove = document.getElementById("btnRemove");
+    btnKlik.addEventListener("click", hello);
+
+    btnRemove.addEventListener("click", function () {
+      btnKlik.removeEventListener("click", hello);
+      alert("Event Dihapus");
+    });
+    // btnKlik.onclick = function () {
+    //   console.log("Hai");
+    // };
+    // function hello() {
+    //   alert("Halo");
+    // }
+    // function hello2() {
+    //   alert("Halo2");
+    // }
+  </script>
+</html>

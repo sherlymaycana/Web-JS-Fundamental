@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM Manipulation</title>
+  </head>
+  <body>
+    <h1 id="judul">Hello, World!</h1>
+    <button onclick="ubahTeks()">Ubah Teks</button>
+
+    <script>
+      let isChanged = false;
+      function ubahTeks() {
+        let judul = document.getElementById("judul");
+        if (isChanged) {
+          judul.textContent = "Hello, World!";
+        } else {
+          judul.textContent = "Halo, JavaScript!";
+        }
+        isChanged = !isChanged;
+      }
+    </script>
+  </body>
+</html>

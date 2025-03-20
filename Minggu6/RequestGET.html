@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch API Example</title>
+  </head>
+  <body>
+    <h2>Data Post</h2>
+    <p id="postData">Memuat data...</p>
+
+    <script>
+      // Mengambil data dari API
+      fetch("https://jsonplaceholder.typicode.com/pxosts/1", {
+        methode: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json()) // Mengubah response ke JSON
+        .then((data) => {
+          console.log("Data:", data);
+
+          // Menampilkan data di halaman web
+          document.getElementById("postData").innerHTML = `
+                    <strong>Judul:</strong> ${data.title} <br>
+                    <strong>Isi:</strong> ${data.body}
+                `;
+        })
+        .catch((error) => console.log("Error:", error)); // Menangani error
+    </script>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="btnSubmit">Submit</button>
+  </body>
+  <script>
+    const btnSubmit = document.querySelector("#btnSubmit");
+    let debounceTimeout;
+    btnSubmit.addEventListener("click", () => {
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(() => {
+        console.log(`Berhasil Submit`);
+      }, 1000);
+    });
+    // btnSubmit.addEventListener(
+    //   "click",
+    //   (debounceTimeout = setTimeout(() => {
+    //     console.log("Data submitted!");
+    //   }, 1000))
+    // );
+  </script>
+</html>

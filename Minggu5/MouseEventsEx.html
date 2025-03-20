@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #colorBox {
+        width: 200px;
+        height: 200px;
+        background-color: white;
+        border: 2px solid black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="colorBox">Klik BTN</div>
+  </body>
+
+  <script>
+    const box = document.getElementById("colorBox");
+
+    box.addEventListener("click", function () {
+      if (box.style.backgroundColor === "red") {
+        box.style.backgroundColor = "white";
+        box.style.border = "3px solid blue";
+      } else {
+        box.style.backgroundColor = "red";
+      }
+    });
+  </script>
+</html>

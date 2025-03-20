@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <p id="textadd"></p>
+  </body>
+
+  <script>
+    const text = document.getElementById("textadd");
+    document.addEventListener("keydown", (event) => {
+      switch (event.key) {
+        case "ArrowUp":
+          console.log("Up arrow pressed");
+          text.textContent("Up arrow pressed");
+          break;
+        case "ArrowDown":
+          console.log("Down arrow pressed");
+          text.textContent("Down arrow pressed");
+          break;
+        case "ArrowLeft":
+          console.log("Left arrow pressed");
+          text.textContent("Left arrow pressed");
+          break;
+        case "ArrowRight":
+          console.log("Right arrow pressed");
+          text.textContent("Right arrow pressed");
+          break;
+      }
+    });
+  </script>
+</html>
